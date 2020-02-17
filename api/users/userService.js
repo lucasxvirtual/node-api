@@ -5,7 +5,10 @@ User.methods(['get', 'post', 'put', 'delete']);
 
 User.updateOptions({new: true, runValidators: true});
 
-User.before('post', function(req, res, next){
+User.before('post', validateEmail)
+    .before('put', validateEmail)
+
+function validateEmail(req, res, next){
     let email = req.params.email
     if(!validator.validate(email)){
         res.statusCode = 400;
@@ -13,6 +16,6 @@ User.before('post', function(req, res, next){
     } else {
         next()
     }
-})
+}
 
 module.exports = User
